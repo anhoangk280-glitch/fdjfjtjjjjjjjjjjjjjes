@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thiệp 20-10</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--pink:#d4145a;--line:#e58aa5}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 50% 38%,#ffdbe7 0%,#fbb9cd 55%,#f393b2 100%);font-family:Georgia,"Times New Roman",serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{position:relative;width:min(92vw,92vh,640px);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;animation:fade2 1s ease both}
+@keyframes fade2{from{opacity:0}to{opacity:1}}
+@keyframes fade{to{opacity:1}}
+.script{font-family:"Brush Script MT","Segoe Script","Lucida Handwriting",cursive}
+
+/* ===== B1: thư đóng, đung đưa + chữ "Mở thư" ===== */
+.deck{position:relative;width:56%;height:41%;cursor:pointer;perspective:1000px;-webkit-tap-highlight-color:transparent}
+.openbtn{position:absolute;left:50%;top:75%;transform:translateX(-50%);background:none;border:0;cursor:pointer;color:var(--pink);font-size:clamp(22px,5.4vw,34px);text-shadow:0 1px 0 #fff9,0 0 12px #fff8;animation:pulse 1.6s ease-in-out infinite;transition:opacity .5s}
+.openbtn.gone{opacity:0;pointer-events:none;animation:none}
+@keyframes pulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.75}50%{transform:translateX(-50%) scale(1.1);opacity:1}}
+.env-back,.env-front,.flap{position:absolute;inset:0}
+.env-back{background:#f6a9c0;border-radius:8px;z-index:1;box-shadow:0 12px 28px #b0124f55}
+.env-front{background:#fff1f5;z-index:3;clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);border-radius:8px}
+.env-back,.env-front{transition:transform .8s ease,opacity .8s ease}
+.flap{height:58%;background:#ffdce7;z-index:4;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:50% 0;transition:opacity .8s ease}
+.seal{position:absolute;left:50%;top:58%;width:15%;z-index:5;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 3px #0005)}
+.deck.open .flap{animation:flap .8s ease forwards}
+.deck.open .seal{animation:sealout .5s ease forwards}
+@keyframes flap{0%{transform:rotateX(0);z-index:4}49%{z-index:4}50%{z-index:0}100%{transform:rotateX(180deg);z-index:0}}
+@keyframes sealout{to{opacity:0;transform:translate(-50%,-50%) scale(.2)}}
+.deck.rise .env-back,.deck.rise .env-front{transform:translateY(45%);opacity:0}
+.deck.rise .flap{opacity:0}
+
+/* ===== B2: chữ bay vào xếp thành trái tim + thiệp "Happy Women's Day" ===== */
+.hb{position:absolute;inset:0;pointer-events:none}
+.hb.beat{animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.035)}30%{transform:scale(1)}45%{transform:scale(1.025)}60%{transform:scale(1)}}
+.hw{position:absolute;left:0;top:0;white-space:nowrap;color:var(--pink);text-shadow:0 1px 0 #fff7,0 0 6px #fff8;opacity:0;transition:transform 1.2s cubic-bezier(.2,.8,.2,1),opacity .8s ease}
+.hw.in{opacity:1}
+.pf{position:absolute;left:50%;top:38%;z-index:6;pointer-events:none;opacity:0;animation:pf 2.3s ease-out forwards}
+@keyframes pf{0%{opacity:0;transform:translate(-50%,0) scale(.3)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),var(--dy)) scale(1.1) rotate(var(--rot))}}
+
+.card{position:absolute;inset:0;border-radius:14px;background:#fff7f9;box-shadow:0 8px 24px #b0124f66;padding:14px}
+.front{z-index:2;display:flex;transform-origin:50% 100%;transform:scale(.78)}
+.deck.open .front{animation:peek .9s ease .7s forwards}
+@keyframes peek{from{transform:translateY(0) scale(.78)}to{transform:translateY(-60%) scale(.78)}}
+.frame{position:relative;flex:1;border:2px dotted var(--line);border-radius:10px}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:26%;opacity:0;color:var(--pink);text-align:center;line-height:1.05}
+.face span{font-size:calc(var(--W)*.072)}
+.fheart{width:calc(var(--W)*.085);margin:calc(var(--W)*.008) 0;animation:hb2 1.1s ease-in-out infinite}
+@keyframes hb2{0%,100%{transform:scale(1)}20%{transform:scale(1.18)}40%{transform:scale(1)}}
+.deck.open .face{animation:fade .8s ease 1.3s forwards}
+.deck.rise .face{animation:facefade .5s ease forwards}
+@keyframes facefade{from{opacity:1}to{opacity:0}}
+
+/* ===== B3: tấm thiệp to ===== */
+.deck.rise .front{animation:letter 2.2s ease-in-out forwards}
+@keyframes letter{0%,36%{transform:translateY(-60%) scale(.78);z-index:2}37%{z-index:5}100%{transform:translateY(0) scale(1.25);z-index:5}}
+.msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 14px;opacity:0;color:#4a1f2e}
+.deck.rise .msg{animation:fade .9s ease 1.3s forwards}
+.msg h2{margin:0 0 calc(var(--W)*.014);font-size:calc(var(--W)*.04);color:#2b0d16}
+.msg p{margin:0 0 calc(var(--W)*.006);font-size:calc(var(--W)*.0215);line-height:1.5}
+.front.done{animation:none!important;transform:scale(1.25);z-index:5}
+.front.done .msg{animation:none!important;opacity:1}
+.front.done .face{animation:none!important;opacity:0}
+.fl{position:fixed;bottom:-30px;pointer-events:none;animation:rise linear forwards}
+@keyframes rise{to{transform:translateY(-110vh) rotate(40deg);opacity:0}}
+.petal{position:fixed;top:-20px;font-size:18px;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.snd{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:20;width:40px;height:40px;border-radius:50%;border:0;background:#fff8;font-size:20px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="hb" id="hb"></div>
+  <div class="deck" id="deck">
+    <div class="env-back"></div>
+    <div class="card front" id="front"><div class="frame">
+      <div class="face script"><span>Happy</span>
+        <svg class="fheart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.5S3 15.8 3 9.6A5 5 0 0 1 12 6.8a5 5 0 0 1 9 2.8c0 6.2-9 11.9-9 11.9z" fill="#e0245e"/></svg>
+        <span>Women's Day</span></div>
+      <div class="msg"><h2 id="t"></h2><div id="m"></div></div>
+    </div></div>
+    <div class="env-front"></div>
+    <div class="flap"></div>
+    <svg class="seal" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.5S3 15.8 3 9.6A5 5 0 0 1 12 6.8a5 5 0 0 1 9 2.8c0 6.2-9 11.9-9 11.9z" fill="#d81b60"/><path d="M6.2 8.5a2.5 2.5 0 0 1 2.6-1.6" stroke="#ff9ab8" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+  </div>
+  <button class="openbtn script" id="openbtn">Mở thư 💌</button>
+  <button class="snd" id="snd" aria-label="Bật/tắt âm thanh">🔊</button>
+</div>
+<script>
+/* ====== TÙY CHỈNH NỘI DUNG THƯ Ở ĐÂY ====== */
+const q=new URLSearchParams(location.search);
+const TIEU_DE = q.get('ten') ? 'Gửi '+q.get('ten') : 'Gửi cậu';          // dòng đầu tiên
+const LOI_NHAN = q.get('loi') ? q.get('loi').split('|') : [               // mỗi phần tử là một dòng
+  'Chúc cậu luôn xinh đẹp, hạnh phúc và thật nhiều niềm vui.',
+  'Cảm ơn cậu vì đã luôn ở bên và làm mọi ngày thêm rực rỡ.',
+  'Mừng ngày Phụ nữ Việt Nam 20-10!'
+];
+/* ======================================== */
+const $=id=>document.getElementById(id);
+const stage=$('stage'),deck=$('deck'),f=$('front'),hb=$('hb'),btn=$('openbtn');
+const setW=()=>stage.style.setProperty('--W',stage.clientWidth+'px');setW();addEventListener('resize',setW);
+$('t').textContent=TIEU_DE;
+LOI_NHAN.forEach(l=>{const p=document.createElement('p');p.textContent=l;$('m').appendChild(p)});
+
+/* đung đưa lên xuống nhịp nhàng (dừng mượt khi thiệp trượt ra) */
+let amp=1,decay=false;
+(function sway(ts){
+  const ph=ts/2200*2*Math.PI;
+  if(decay)amp*=0.94;
+  if(amp<0.01){deck.style.transform='none';return}
+  deck.style.transform=`translateY(${-14*(0.5-0.5*Math.cos(ph))*amp}px) rotate(${-2.5*Math.cos(ph)*amp}deg)`;
+  requestAnimationFrame(sway);
+})(0);
+
+function petals(){for(let k=0;k<16;k++){const p=document.createElement('span');p.className='petal';p.textContent=Math.random()>.5?'🌸':'🌹';p.style.left=Math.random()*100+'vw';p.style.animationDuration=(3+Math.random()*3)+'s';p.style.animationDelay=Math.random()*1.2+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),8000)}}
+function floatHearts(){setInterval(()=>{const h=document.createElement('span');h.className='fl';h.textContent='💗';h.style.left=Math.random()*100+'vw';h.style.fontSize=(12+Math.random()*14)+'px';h.style.animationDuration=(5+Math.random()*4)+'s';document.body.appendChild(h);setTimeout(()=>h.remove(),9500)},900)}
+function emit(n){
+  const W=stage.clientWidth,E=['💗','💖','🩷','💕'];
+  for(let k=0;k<n;k++)setTimeout(()=>{
+    const h=document.createElement('span');h.className='pf';h.textContent=E[Math.random()*E.length|0];
+    h.style.fontSize=(W*0.03+Math.random()*W*0.03)+'px';
+    h.style.setProperty('--dx',((Math.random()-.5)*W*0.6)+'px');
+    h.style.setProperty('--dy',(-W*(0.1+Math.random()*0.25))+'px');
+    h.style.setProperty('--rot',((Math.random()-.5)*60)+'deg');
+    stage.appendChild(h);setTimeout(()=>h.remove(),2400);
+  },k*90);
+}
+
+/* "Women's Day ❀ From With Love 20-10" từng chữ bay vào xếp thành trái tim */
+function buildHeart(){
+  const W=stage.clientWidth,s=W*0.0265,cx=W/2,cy=W/2,M=3000,P=[];let L=0;
+  for(let k=0;k<=M;k++){
+    const a=2*Math.PI*k/M,x=16*Math.pow(Math.sin(a),3),y=13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a);
+    const px=cx+s*x,py=cy-s*(y+2.5);
+    if(k)L+=Math.hypot(px-P[k-1].x,py-P[k-1].y);
+    P.push({x:px,y:py,l:L});
+  }
+  const ctx=document.createElement('canvas').getContext('2d');
+  ctx.font='100px "Brush Script MT","Segoe Script","Lucida Handwriting",cursive';
+  const items=[];for(let r=0;r<4;r++)items.push("Women's Day","From With Love 20-10");
+  const str=items.join(' ❀ ')+' ❀ ';
+  const chars=[...str],adv=chars.map(c=>ctx.measureText(c).width),tot=adv.reduce((a,b)=>a+b,0);
+  const k=(L*0.995)/tot,fs=100*k,nL=chars.filter(c=>c!==' ').length;
+  let cum=0,n=0;const els=[];
+  chars.forEach((c,i)=>{
+    const a=adv[i]*k;
+    if(c!==' '){
+      const sv=cum+a/2;let lo=0,hi=M;
+      while(lo<hi){const mid=(lo+hi)>>1;if(P[mid].l<sv)lo=mid+1;else hi=mid}
+      const p0=P[Math.max(0,lo-4)],p1=P[Math.min(M,lo+4)];
+      const ang=Math.atan2(p1.y-p0.y,p1.x-p0.x)*180/Math.PI;
+      const el=document.createElement('span');el.className='hw script';el.textContent=c;el.style.fontSize=fs+'px';
+      el.style.left=P[lo].x+'px';el.style.top=P[lo].y+'px';
+      el.style.transform=`translate(-50%,-50%) translate(${(Math.random()-.5)*W*1.4}px,${(Math.random()-.5)*W*1.4}px) rotate(${Math.random()*360-180}deg) scale(.2)`;
+      el._f=`translate(-50%,-50%) rotate(${ang}deg)`;el._d=0.5+(n/nL)*3;n++;
+      hb.appendChild(el);els.push(el);
+    }
+    cum+=a;
+  });
+  void hb.offsetWidth;
+  els.forEach(el=>{el.style.transitionDelay=el._d+'s';el.style.transform=el._f;el.classList.add('in')});
+}
+
+/* ====== ÂM THANH (tạo bằng Web Audio, không cần file ngoài) ====== */
+let AC=null,master=null,noiseBuf=null,muted=false,hbTimer=null,musicTimer=null;
+function initAudio(){
+  if(!AC){
+    try{
+      AC=new (window.AudioContext||window.webkitAudioContext)();
+      master=AC.createGain();master.gain.value=muted?0:0.9;master.connect(AC.destination);
+      noiseBuf=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate);
+      const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    }catch(e){AC=null}
+  }
+  if(AC&&AC.state==='suspended')AC.resume();
+}
+function tone(freq,t0,dur,type,vol){
+  if(!AC)return;
+  const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+t0;
+  o.type=type||'sine';o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+0.05);
+}
+function bell(freq,t0,vol){tone(freq,t0,1.3,'sine',vol);tone(freq*2.01,t0,0.7,'sine',vol*0.35);tone(freq*3.02,t0,0.35,'sine',vol*0.15)}
+function whoosh(t0,dur,f0,f1,vol){
+  if(!AC)return;
+  const t=AC.currentTime+t0,src=AC.createBufferSource(),flt=AC.createBiquadFilter(),g=AC.createGain();
+  src.buffer=noiseBuf;flt.type='bandpass';flt.Q.value=1.2;
+  flt.frequency.setValueAtTime(f0,t);flt.frequency.exponentialRampToValueAtTime(f1,t+dur);
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+dur*0.4);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  src.connect(flt);flt.connect(g);g.connect(master);src.start(t,Math.random(),dur+0.1);
+}
+function thump(t0,vol){
+  if(!AC)return;
+  const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+t0;
+  o.type='sine';o.frequency.setValueAtTime(95,t);o.frequency.exponentialRampToValueAtTime(40,t+0.15);
+  g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+0.015);g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+0.3);
+}
+const PENTA=[784,880,988,1175,1318,1568,1760];
+function sparkle(){if(AC)bell(PENTA[Math.random()*PENTA.length|0],0,0.035)}
+function sfxOpen(){
+  tone(180,0,0.12,'triangle',0.2);              // "tách" khi mở dấu niêm phong
+  whoosh(0.05,0.6,500,2800,0.12);               // nắp thư lật
+  whoosh(0.7,0.7,300,1800,0.1);                 // thiệp nhô lên
+  bell(1318,1.3,0.07);                          // chữ "Happy" hiện
+  setTimeout(startMusic,1200);
+}
+function startHeartbeat(){
+  const beat=()=>{thump(0.24,0.35);thump(0.72,0.28)};
+  beat();hbTimer=setInterval(beat,1600);
+}
+function sfxFly(){
+  whoosh(0,1.3,250,4000,0.28);                  // thiệp bay ra
+  [523.25,659.25,783.99,1046.5].forEach((f,i)=>bell(f,0.15+i*0.12,0.09));
+}
+function sfxPetals(){for(let i=0;i<5;i++)bell(PENTA[Math.random()*PENTA.length|0],i*0.09,0.04)}
+function sfxDone(){
+  clearInterval(hbTimer);
+  [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>bell(f,i*0.07,0.08));
+}
+const MEL=[523.25,659.25,783.99,659.25,880,783.99,659.25,587.33,523.25,659.25,783.99,1046.5,880,783.99,659.25,523.25];
+function startMusic(){
+  let i=0;clearInterval(musicTimer);
+  musicTimer=setInterval(()=>{if(!AC||muted)return;const f=MEL[i++%MEL.length];tone(f,0,0.9,'sine',0.045);tone(f*2,0,0.4,'sine',0.012)},480);
+}
+$('snd').addEventListener('click',e=>{
+  e.stopPropagation();muted=!muted;$('snd').textContent=muted?'🔇':'🔊';
+  if(master)master.gain.setTargetAtTime(muted?0:0.9,AC.currentTime,0.05);
+});
+/* ================================================================ */
+
+let started=false,emitter;
+function openLetter(){
+  if(started)return;started=true;initAudio();sfxOpen();
+  btn.classList.add('gone');deck.classList.add('open');        // nắp thư lật mở, thiệp "Happy ♥ Women's Day" nhô lên
+  buildHeart();                                                 // chữ bay vào tạo trái tim
+  setTimeout(()=>{emitter=setInterval(()=>{emit(2);sparkle()},420)},900);   // trái tim nhỏ bay ra từ thư
+  setTimeout(()=>{hb.classList.add('beat');startHeartbeat()},5000);                // trái tim đập nhịp
+  setTimeout(()=>{clearInterval(emitter);emit(14);sfxFly();deck.classList.add('rise');decay=true},6500); // sang B3
+  setTimeout(()=>{petals();sfxPetals()},8300);
+  setTimeout(()=>{f.classList.add('done');floatHearts();sfxDone()},8800);
+}
+deck.addEventListener('click',()=>{if(!started)openLetter();else if(f.classList.contains('done')){petals();sfxPetals()}});
+btn.addEventListener('click',openLetter);
+</script>
+</body>
+</html>
